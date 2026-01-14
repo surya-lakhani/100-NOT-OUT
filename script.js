@@ -33,6 +33,7 @@ document.getElementById("nextPlayerBtn").onclick = () => {
       state.players.join(", ");
     input.value = "";
   }
+  input.focus();
 };
 
 document.getElementById("doneAddingBtn").onclick = () => {
@@ -126,3 +127,4 @@ function setTestData() {
     asd: [],
   };
 }
+
