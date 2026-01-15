@@ -1,13 +1,16 @@
 const modal = document.getElementById("playerModal");
 const scorePage = document.getElementById("scorePage");
 const scoreTable = document.getElementById("scoreTable");
-const suit = [1,2,3,4];
-let rounds = 0;
+const suits = ["Spades", "Diamonds", "Clubs", "Hearts"];
+const suitImage = document.getElementById("suit");
+let imgCount = 0;
 const state = {
   players: [],
   scores: {},
   check: "",
 };
+
+renderSuit(suitImage);
 
 document.getElementById("newGameBtn").onclick = () => {
   resetGame();
@@ -54,8 +57,8 @@ document.getElementById("addScoreBtn").onclick = () => {
     score: parseInt(document.getElementById("score_" + p)?.value) || 0,
     check: document.getElementById("checkbox_" + p).checked,
   }));
-  console.log(scores);
   addRound(scores);
+  renderSuit(suitImage);
   renderTable(scoreTable);
 };
 
@@ -98,6 +101,13 @@ function show(element) {
 
 function hide(element) {
   element.classList.add("hidden");
+}
+
+function renderSuit(imageDiv) {
+  imgCount = (imgCount) % suits.length;
+  let html = `<img src="../assets/${suits[imgCount]}.png" alt="alternatetext" width="50" height="50">`;
+  imageDiv.innerHTML = html;
+  imgCount++
 }
 
 function renderTable(table) {
