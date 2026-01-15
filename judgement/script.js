@@ -81,7 +81,6 @@ function addRound(scores) {
 function resetGame() {
   state.players = [];
   state.scores = {};
-  rounds = 0;
   document.getElementById("playerList").textContent = "";
 }
 
