@@ -1,11 +1,12 @@
+import { state, resetGame, setTestData } from '../common/state.js';
+import { addPlayer, activePlayers } from '../common/game.js';
+import { saveGame, loadGames } from '../common/storage.js';
+import { show, hide } from '../common/ui.js';
+
 const modal = document.getElementById("playerModal");
 const scorePage = document.getElementById("scorePage");
 const scoreTable = document.getElementById("scoreTable");
-const KEY = "100-not-out-games";
-const state = {
-  players: [],
-  scores: {},
-};
+
 
 document.getElementById("newGameBtn").onclick = () => {
   resetGame();
@@ -58,49 +59,10 @@ document.getElementById("addScoreBtn").onclick = () => {
   renderTable(scoreTable);
 };
 
-function addPlayer(name) {
-  if (!name || state.players.includes(name) || state.players.length >= 15)
-    return false;
-  state.players.push(name);
-  state.scores[name] = [];
-  return true;
-}
-
 function addRound(scores) {
   scores.forEach(({ player, score }) => {
     state.scores[player].push(score);
   });
-}
-
-function activePlayers() {
-  return state.players.filter(
-    (p) => state.scores[p].reduce((a, b) => a + b, 0) <= 100
-  );
-}
-
-function resetGame() {
-  state.players = [];
-  state.scores = {};
-  state.rounds = 0;
-  document.getElementById("playerList").textContent = "";
-}
-
-function saveGame(game) {
-  const games = loadGames();
-  games.push(game);
-  localStorage.setItem(KEY, JSON.stringify(games));
-}
-
-function loadGames() {
-  return JSON.parse(localStorage.getItem(KEY) || "[]");
-}
-
-function show(element) {
-  element.classList.remove("hidden");
-}
-
-function hide(element) {
-  element.classList.add("hidden");
 }
 
 function renderTable(table) {
@@ -116,14 +78,4 @@ function renderTable(table) {
     </tr>`;
   });
   table.innerHTML = html;
-}
-
-function setTestData() {
-  state.players = ["abc", "xyz", "qwe", "asd"];
-  state.scores = {
-    abc: [],
-    xyz: [],
-    qwe: [],
-    asd: [],
-  };
 }

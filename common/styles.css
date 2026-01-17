@@ -1,7 +1,7 @@
 .container {
   display: flex;
   justify-content: center; /* Centers boxes horizontally */
-  align-items: center;     /* Centers boxes vertically */
+  align-items: center; /* Centers boxes vertically */
 }
 
 .box {
@@ -85,13 +85,20 @@ td input {
   border: 0rem;
 }
 
+.scorePage {
+  display: flexbox;
+  display: flexbox;
+  justify-content: center; /* Centers horizontally along the main axis */
+  align-items: center; /* Centers vertically along the cross axis */
+}
+
 /* Style the modal content (optional, default styles are provided by browsers) */
 .playerModal {
   display: flexbox;
   justify-content: center; /* Centers horizontally along the main axis */
   align-items: center; /* Centers vertically along the cross axis */
   max-width: 500px;
-  border:none;
+  border: none;
   border-radius: 8px;
 }
 

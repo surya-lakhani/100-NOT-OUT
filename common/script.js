@@ -1,11 +1,11 @@
+import { state, resetGame } from './state.js';
+import { addPlayer, addRound, activePlayers } from './game.js';
+import { saveGame, loadGames } from './storage.js';
+import { show, hide, renderTable } from './ui.js';
+
 const modal = document.getElementById("playerModal");
 const scorePage = document.getElementById("scorePage");
 const scoreTable = document.getElementById("scoreTable");
-const KEY = "100-not-out-games";
-const state = {
-  players: [],
-  scores: {},
-};
 
 document.getElementById("newGameBtn").onclick = () => {
   resetGame();
@@ -29,8 +29,7 @@ document.getElementById("resetScoreBtn").onclick = () => {
 document.getElementById("nextPlayerBtn").onclick = () => {
   const input = document.getElementById("playerNameInput");
   if (addPlayer(input.value.trim())) {
-    document.getElementById("playerList").textContent =
-      state.players.join(",");
+    document.getElementById("playerList").textContent = state.players.join(",");
     input.value = "";
   }
   input.focus();
@@ -57,73 +56,3 @@ document.getElementById("addScoreBtn").onclick = () => {
   addRound(scores);
   renderTable(scoreTable);
 };
-
-function addPlayer(name) {
-  if (!name || state.players.includes(name) || state.players.length >= 15)
-    return false;
-  state.players.push(name);
-  state.scores[name] = [];
-  return true;
-}
-
-function addRound(scores) {
-  scores.forEach(({ player, score }) => {
-    state.scores[player].push(score);
-  });
-}
-
-function activePlayers() {
-  return state.players.filter(
-    (p) => state.scores[p].reduce((a, b) => a + b, 0) <= 100
-  );
-}
-
-function resetGame() {
-  state.players = [];
-  state.scores = {};
-  state.rounds = 0;
-  document.getElementById("playerList").textContent = "";
-}
-
-function saveGame(game) {
-  const games = loadGames();
-  games.push(game);
-  localStorage.setItem(KEY, JSON.stringify(games));
-}
-
-function loadGames() {
-  return JSON.parse(localStorage.getItem(KEY) || "[]");
-}
-
-function show(element) {
-  element.classList.remove("hidden");
-}
-
-function hide(element) {
-  element.classList.add("hidden");
-}
-
-function renderTable(table) {
-  let html = `<tr><th>Player</th>`;
-  html += `<th>Total</th>`;
-  html += `<th>Round Score</th></tr>`;
-  state.players.forEach((p) => {
-    const total = state.scores[p].reduce((a, b) => a + b, 0);
-    html += `<tr>
-      <td>${p}${total > 100 ? " (Out)" : ""}</td>
-      <td>${total}</td>
-      <td><input class="inputScore" type="text" id=score_${[p]}></td>
-    </tr>`;
-  });
-  table.innerHTML = html;
-}
-
-function setTestData() {
-  state.players = ["abc", "xyz", "qwe", "asd"];
-  state.scores = {
-    abc: [],
-    xyz: [],
-    qwe: [],
-    asd: [],
-  };
-}

@@ -1,16 +1,19 @@
+import { state, resetGame, setTestData } from "../common/state.js";
+import { addPlayer, activePlayers } from "../common/game.js";
+import { saveGame, loadGames } from "../common/storage.js";
+import { show, hide } from "../common/ui.js";
+
 const modal = document.getElementById("playerModal");
 const scorePage = document.getElementById("scorePage");
 const scoreTable = document.getElementById("scoreTable");
-const suits = ["Spades", "Diamonds", "Clubs", "Hearts"];
+const roundTable = document.getElementById("roundTable");
 const suitImage = document.getElementById("suit");
+const suits = ["Spades", "Diamonds", "Clubs", "Hearts"];
+let maxRound;
 let imgCount = 0;
-const state = {
-  players: [],
-  scores: {},
-  check: "",
-};
-
-renderSuit(suitImage);
+let round = 0;
+let cards;
+let direction = true;
 
 document.getElementById("newGameBtn").onclick = () => {
   resetGame();
@@ -28,6 +31,9 @@ document.getElementById("resetScoreBtn").onclick = () => {
   state.players.forEach((p) => {
     state.scores[p] = [];
   });
+  imgCount = 0;
+  round = 0;
+  renderRoundSuit(roundTable);
   renderTable(scoreTable);
 };
 
@@ -46,7 +52,12 @@ document.getElementById("doneAddingBtn").onclick = () => {
     alert("Please add at least two player!");
   } else {
     modal.close("playerModal");
+    maxRound = Math.trunc(52 / state.players.length);
+    const asc = Array.from({ length: maxRound }, (_, i) => i + 1);
+    const dsc = [...asc].reverse();
+    cards = asc.concat(dsc);
     show(scorePage);
+    renderRoundSuit(roundTable);
     renderTable(scoreTable);
   }
 };
@@ -58,17 +69,9 @@ document.getElementById("addScoreBtn").onclick = () => {
     check: document.getElementById("checkbox_" + p).checked,
   }));
   addRound(scores);
-  renderSuit(suitImage);
+  renderRoundSuit(roundTable);
   renderTable(scoreTable);
 };
-
-function addPlayer(name) {
-  if (!name || state.players.includes(name) || state.players.length >= 20)
-    return false;
-  state.players.push(name);
-  state.scores[name] = [];
-  return true;
-}
 
 function addRound(scores) {
   scores.forEach(({ player, score, check }) => {
@@ -78,35 +81,24 @@ function addRound(scores) {
   });
 }
 
-function resetGame() {
-  state.players = [];
-  state.scores = {};
-  document.getElementById("playerList").textContent = "";
-}
+function renderRoundSuit(table) {
+  imgCount = imgCount % suits.length;
+  let cardNum;
+  if (round >= cards.length) {
+    cardNum = "Game Over";
+  } else {
+    cardNum = cards[round];
+  }
 
-function saveGame(game) {
-  const games = loadGames();
-  games.push(game);
-  localStorage.setItem(KEY, JSON.stringify(games));
-}
-
-function loadGames() {
-  return JSON.parse(localStorage.getItem(KEY) || "[]");
-}
-
-function show(element) {
-  element.classList.remove("hidden");
-}
-
-function hide(element) {
-  element.classList.add("hidden");
-}
-
-function renderSuit(imageDiv) {
-  imgCount = (imgCount) % suits.length;
-  let html = `<img src="../assets/${suits[imgCount]}.png" alt="alternatetext" width="50" height="50">`;
-  imageDiv.innerHTML = html;
-  imgCount++
+  let html = `<tbody>
+    <tr>
+      <th>Cards: ${cardNum}</th>
+      <th><img src="../assets/${suits[imgCount]}.png" alt="${suits[imgCount]}" width="30" height="30"></th>
+    </tr>
+  </tbody>`;
+  table.innerHTML = html;
+  imgCount++;
+  round++;
 }
 
 function renderTable(table) {
@@ -125,14 +117,4 @@ function renderTable(table) {
     </tr>`;
   });
   table.innerHTML = html;
-}
-
-function setTestData() {
-  state.players = ["abc", "xyz", "qwe", "asd"];
-  state.scores = {
-    abc: [],
-    xyz: [],
-    qwe: [],
-    asd: [],
-  };
 }

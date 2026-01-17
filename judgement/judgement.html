@@ -18,7 +18,6 @@
       <button id="addPlayerBtn">Add Players</button>
       <button id="resetScoreBtn" class="danger">Reset Score</button>
       <button id="addScoreBtn">Add Score</button>
-      <div id="suit"><img></img></div>
     </main>
 
   <!-- The dialog element itself -->
@@ -33,8 +32,11 @@
   </dialog>
 
   <!-- Score Page -->
-  <main id="scorePage" class="hidden">
+  <main id="scorePage" class="scorePage hidden">
+    <div>
+    <table id="roundTable"></table>
     <table id="scoreTable"></table>
+  </div>
   </main>
 
   <script type="module" src="script.js"></script>
