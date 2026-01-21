@@ -9,7 +9,7 @@ const scoreTable = document.getElementById("scoreTable");
 const roundTable = document.getElementById("roundTable");
 const suitImage = document.getElementById("suit");
 const suits = ["Spades", "Diamonds", "Clubs", "Hearts"];
-let maxRound;
+let maxRound,dealer;
 let imgCount = 0;
 let round = 0;
 let cards;
@@ -79,9 +79,16 @@ function addRound(scores) {
       state.scores[player].push(score + 10);
     }
   });
+  state.rounds++;
 }
 
 function renderRoundSuit(table) {
+  if (state.rounds===0){
+    const firstDealer = Math.floor(Math.random() * (state.players.length));
+    dealer = firstDealer;
+  }else{
+    dealer = dealer % state.players.length;
+  }
   imgCount = imgCount % suits.length;
   let cardNum;
   if (round >= cards.length) {
@@ -93,12 +100,14 @@ function renderRoundSuit(table) {
   let html = `<tbody>
     <tr>
       <th>Cards: ${cardNum}</th>
+      <th>Dealer: ${state.players[dealer]}</th>
       <th><img src="../assets/${suits[imgCount]}.png" alt="${suits[imgCount]}" width="30" height="30"></th>
     </tr>
   </tbody>`;
   table.innerHTML = html;
   imgCount++;
   round++;
+  dealer++;
 }
 
 function renderTable(table) {

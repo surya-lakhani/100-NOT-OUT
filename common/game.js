@@ -8,12 +8,6 @@ export function addPlayer(name) {
   return true;
 }
 
-export function addRound(scores) {
-  scores.forEach(({ player, score }) => {
-    state.scores[player].push(score);
-  });
-}
-
 export function activePlayers() {
   return state.players.filter(
     (p) => state.scores[p].reduce((a, b) => a + b, 0) <= 100

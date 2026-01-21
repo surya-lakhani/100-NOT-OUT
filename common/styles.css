@@ -69,6 +69,8 @@ table {
   width: 80%;
   border-collapse: collapse;
   background: white;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 th,
@@ -86,7 +88,6 @@ td input {
 }
 
 .scorePage {
-  display: flexbox;
   display: flexbox;
   justify-content: center; /* Centers horizontally along the main axis */
   align-items: center; /* Centers vertically along the cross axis */

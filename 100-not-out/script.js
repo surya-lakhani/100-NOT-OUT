@@ -1,12 +1,13 @@
-import { state, resetGame, setTestData } from '../common/state.js';
-import { addPlayer, activePlayers } from '../common/game.js';
-import { saveGame, loadGames } from '../common/storage.js';
-import { show, hide } from '../common/ui.js';
+import { state, resetGame, resetScore, setTestData } from "../common/state.js";
+import { addPlayer, activePlayers } from "../common/game.js";
+import { saveGame, loadGames } from "../common/storage.js";
+import { show, hide } from "../common/ui.js";
 
 const modal = document.getElementById("playerModal");
 const scorePage = document.getElementById("scorePage");
 const scoreTable = document.getElementById("scoreTable");
-
+const roundTable = document.getElementById("roundTable");
+let dealer;
 
 document.getElementById("newGameBtn").onclick = () => {
   resetGame();
@@ -15,16 +16,15 @@ document.getElementById("newGameBtn").onclick = () => {
 };
 
 document.getElementById("addPlayerBtn").onclick = () => {
-  //   setTestData();
+  // setTestData();
   modal.showModal();
   document.getElementById("playerList").textContent = state.players.join(", ");
 };
 
 document.getElementById("resetScoreBtn").onclick = () => {
-  state.players.forEach((p) => {
-    state.scores[p] = [];
-  });
-  renderTable(scoreTable);
+  resetScore();
+  renderRoundSuit();
+  renderTable();
 };
 
 document.getElementById("nextPlayerBtn").onclick = () => {
@@ -43,7 +43,8 @@ document.getElementById("doneAddingBtn").onclick = () => {
   } else {
     modal.close("playerModal");
     show(scorePage);
-    renderTable(scoreTable);
+    renderRoundSuit();
+    renderTable();
   }
 };
 
@@ -55,17 +56,45 @@ document.getElementById("addScoreBtn").onclick = () => {
     player: p,
     score: parseInt(document.getElementById("score_" + p)?.value) || 0,
   }));
+  dealer = roundScore(scores);
   addRound(scores);
-  renderTable(scoreTable);
+  renderRoundSuit(dealer);
+  renderTable();
 };
+
+function roundScore(scores) {
+  const maxObject = scores.reduce((prev, current) => {
+    return prev.score > current.score ? prev : current;
+  });
+  return maxObject.player;
+}
 
 function addRound(scores) {
   scores.forEach(({ player, score }) => {
     state.scores[player].push(score);
   });
+  state.rounds++;
 }
 
-function renderTable(table) {
+function renderRoundSuit(dealer) {
+  if (state.rounds === 0) {
+    for (let i = 0; i < 10; i++) {
+      const firstDealer = Math.floor(
+        Math.random() * (state.players.length)
+      );
+      dealer = state.players[firstDealer];
+      console.log(dealer +":"+Math.floor(Math.random() * (state.players.length)));
+    }
+  }
+  let html = `<tbody>
+    <tr>
+      <th>Dealer: ${dealer}</th>
+    </tr>
+  </tbody>`;
+  roundTable.innerHTML = html;
+}
+
+function renderTable() {
   let html = `<tr><th>Player</th>`;
   html += `<th>Total</th>`;
   html += `<th>Round Score</th></tr>`;
@@ -77,5 +106,5 @@ function renderTable(table) {
       <td><input class="inputScore" type="text" id=score_${[p]}></td>
     </tr>`;
   });
-  table.innerHTML = html;
+  scoreTable.innerHTML = html;
 }
