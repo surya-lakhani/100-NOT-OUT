@@ -1,10 +1,12 @@
 import { state } from "./state.js";
 
 export function addPlayer(name) {
-  if (!name || state.players.includes(name) || state.players.length >= 15)
+  if (!name || state.players.includes(name) || state.players.length >= 20)
     return false;
-  state.players.push(name);
-  state.scores[name] = [];
+    name.trim().split(' ').forEach(element => {
+      state.players.push(element);
+      state.scores[element] = [];
+    });
   return true;
 }
 
