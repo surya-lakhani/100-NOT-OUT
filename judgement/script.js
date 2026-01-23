@@ -80,9 +80,13 @@ document.getElementById("addScoreBtn").onclick = () => {
     check: document.getElementById("checkbox_" + p).checked,
   }));
   addRound(scores);
+  state.dealer = state.players[dealer];
+  imgCount++;
+  dealer++;
   renderRoundSuit(roundTable);
   renderTable(scoreTable);
   saveGame(key, state);
+
 };
 
 function setGameRounds() {
@@ -130,10 +134,6 @@ function renderRoundSuit() {
     </tr>
   </tbody>`;
   roundTable.innerHTML = html;
-
-  state.dealer = state.players[dealer];
-  imgCount++;
-  dealer++;
 }
 
 function renderTable() {
