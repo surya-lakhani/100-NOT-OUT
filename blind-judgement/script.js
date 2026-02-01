@@ -1,7 +1,8 @@
 import { state, resetGame, setTestData } from "../common/state.js";
 import { addPlayer } from "../common/game.js";
 import { saveGame, loadGames } from "../common/storage.js";
-import { show, hide } from "../common/ui.js";
+import { show, hide, mainMenu } from "../common/ui.js";
+mainMenu();
 
 const key = "score-tracker-blind-judgement";
 const modal = document.getElementById("playerModal");
@@ -257,24 +258,4 @@ confirmPredictionBtn.onclick = () => {
   }
 
   showPredictionModal();
-};
-
-const menuToggle = document.getElementById('menuToggle');
-const menu = document.getElementById('menu');
-const backdrop = document.getElementById('menuBackdrop');
-
-menuToggle.onclick = () => {
-  menu.classList.remove('hidden');
-  backdrop.classList.remove('hidden');
-};
-
-backdrop.onclick = closeMenu;
-
-menu.querySelectorAll('a').forEach(link => {
-  link.onclick = closeMenu;
-});
-
-function closeMenu() {
-  menu.classList.add('hidden');
-  backdrop.classList.add('hidden');
 }

@@ -1,6 +1,5 @@
 import { state, resetGame } from './state.js';
 import { addPlayer, addRound, activePlayers } from './game.js';
-import { saveGame, loadGames } from './storage.js';
 import { show, hide, renderTable } from './ui.js';
 
 const modal = document.getElementById("playerModal");

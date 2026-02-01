@@ -1,5 +1,9 @@
 import { state } from "./state.js";
 
+const menuToggle = document.getElementById('menuToggle');
+const menu = document.getElementById('menu');
+const backdrop = document.getElementById('menuBackdrop');
+
 export function show(element) {
   element.classList.remove("hidden");
 }
@@ -22,3 +26,23 @@ export function renderTable(table) {
     });
     table.innerHTML = html;
   }
+
+export function mainMenu(){
+
+menuToggle.onclick = () => {
+  menu.classList.remove('hidden');
+  backdrop.classList.remove('hidden');
+};
+
+backdrop.onclick = closeMenu;
+
+menu.querySelectorAll('a').forEach(link => {
+  link.onclick = closeMenu;
+});
+
+function closeMenu() {
+  menu.classList.add('hidden');
+  backdrop.classList.add('hidden');
+}
+
+}

@@ -121,7 +121,6 @@ td input {
 .app-header {
   display: flex;
   align-items: center;
-  background: black;
   color: white;
   padding: 1rem;
 }

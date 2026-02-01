@@ -1,7 +1,8 @@
 import { state, resetGame, resetScore, setTestData } from "../common/state.js";
 import { addPlayer, activePlayers } from "../common/game.js";
 import { saveGame, loadGames } from "../common/storage.js";
-import { show, hide } from "../common/ui.js";
+import { show, hide, mainMenu } from "../common/ui.js";
+mainMenu();
 
 const key = "score-tracker-100-not-out";
 const modal = document.getElementById("playerModal");
@@ -117,24 +118,4 @@ function renderTable() {
     </tr>`;
   });
   scoreTable.innerHTML = html;
-}
-
-const menuToggle = document.getElementById('menuToggle');
-const menu = document.getElementById('menu');
-const backdrop = document.getElementById('menuBackdrop');
-
-menuToggle.onclick = () => {
-  menu.classList.remove('hidden');
-  backdrop.classList.remove('hidden');
-};
-
-backdrop.onclick = closeMenu;
-
-menu.querySelectorAll('a').forEach(link => {
-  link.onclick = closeMenu;
-});
-
-function closeMenu() {
-  menu.classList.add('hidden');
-  backdrop.classList.add('hidden');
 }
